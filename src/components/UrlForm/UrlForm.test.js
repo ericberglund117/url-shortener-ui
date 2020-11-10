@@ -3,6 +3,7 @@ import UrlForm from './UrlForm'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
+jest.mock('../../apiCalls');
 
 describe('UrlForm', () => {
   it('When the Form is rendered, make sure that the correct elements render on the dom', () => {
@@ -31,6 +32,14 @@ describe('UrlForm', () => {
   });
 
   it('When the form is submitted, make sure any appropriate functions are called.', () => {
+    const fetch = jest.fn()
 
+    render(<UrlForm fetch={fetch}/>)
+
+    const button = screen.getByRole('button', { name: /shorten please!/i })
+
+    userEvent.click(button)
+
+    expect(fetch).toHaveBeenCalled()
   });
 });
