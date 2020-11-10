@@ -25,7 +25,7 @@ describe('App', () => {
       id: 3,
       long_url:"http://www.frenchtoastsunday.com/2012/08/top-10-quotes-from-hot-rod.html",
       short_url: "http://localhost:3001/useshorturl/2",
-      title: "Hot Rod"
+      title: "Bangers and Mash"
     }]
 
     getUrls.mockResolvedValue(expectedUrls)
@@ -52,7 +52,7 @@ describe('App', () => {
   it('When the App renders, make sure that users can fill out the form, submit the form, and see a new url added to the DOM', async () => {
     render(<App />)
 
-    const titleInput = await waitFor(() => screen.getByPlaceholderText('Title...'));
+    const titleInput = screen.getByPlaceholderText('Title...');
     const urlInput = screen.getByPlaceholderText('URL to Shorten...');
     const button = screen.getByRole('button', { name: /shorten please!/i })
 
@@ -60,12 +60,14 @@ describe('App', () => {
     expect(urlInput).toBeInTheDocument();
     expect(button).toBeInTheDocument();
 
-    userEvent.type(titleInput, 'Hot Rod')
-    expect(titleInput).toHaveValue('Hot Rod')
+    userEvent.type(titleInput, 'Bangers and Mash')
+    expect(titleInput).toHaveValue('Bangers and Mash')
 
-    userEvent.type(urlInput, 'www.longUrl.com')
-    expect(urlInput).toHaveValue('www.longUrl.com')
+    userEvent.type(urlInput, 'http://www.frenchtoastsunday.com/2012/08/top-10-quotes-from-hot-rod.html')
+    expect(urlInput).toHaveValue('http://www.frenchtoastsunday.com/2012/08/top-10-quotes-from-hot-rod.html')
     userEvent.click(button)
-    expect()
+    await waitFor(() => expect(postUrls).toHaveBeenCalledTimes(1))
+    const newTitle = await waitFor(() => screen.getByText('Bangers and Mash'))
+    expect(newTitle).toBeInTheDocument();
   })
 });
