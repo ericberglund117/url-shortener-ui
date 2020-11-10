@@ -73,13 +73,7 @@ describe('App', () => {
 
     userEvent.type(urlInput, 'www.longUrl.com')
     expect(urlInput).toHaveValue('www.longUrl.com')
-
-    const fetch = jest.fn()
-    
-    render(<UrlForm fetch={fetch}/>)
-
     userEvent.click(button)
-
-    expect(fetch).toHaveBeenCalled()
+    expect()
   })
 });
