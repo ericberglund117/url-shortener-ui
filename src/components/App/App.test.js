@@ -1,5 +1,6 @@
 import React from 'react';
 import App from './App'
+import UrlContainer from '../UrlContainer/UrlContainer'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
@@ -28,9 +29,20 @@ describe('App', () => {
     expect(header).toBeInTheDocument()
   });
 
-  // it('When the App renders, make sure that any urls on the server are added to the dom', () => {
-  //   render(<App />)
-  // });
+  it('When the App renders, make sure that any urls on the server are added to the dom', () => {
+    getUrls.mockResolvedValueOnce(expectedUrls)
+
+    render(<App />)
+    render(<UrlContainer urls={expectedUrls}/>)
+
+    const urlOneTitle = screen.getByText("Awesome photo")
+    const urlOneLong = screen.getByText("https://images.unsplash.com/photo-1531898418865-480b7090470f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80")
+    const urlOneShort = screen.getByText("http://localhost:3001/useshorturl/1")
+
+    expect(urlOneTitle).toBeInTheDocument();
+    expect(urlOneLong).toBeInTheDocument();
+    expect(urlOneShort).toBeInTheDocument();
+  });
   //
   // it('When the App renders, make sure that users can fill out the form, submit the form, and see a new url added to the DOM', () => {
   //   render(<App />)
